@@ -7,11 +7,11 @@
 .lb-form.error{
 	border-color: #f00;
 }
-input.lb-input{ 
+.lb-input{ 
 	position: absolute;
 	left: 0;
 	top:0;
-	right: 0px;
+	right: 0;
 	height: 30px;
 	line-height: 30px;
 	border: 0 none;
@@ -46,8 +46,8 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	top:-11px;
 	margin-left:-3px; 
 	left: 50%;
-	height: 0px;
-	width: 0px;
+	height: 0;
+	width: 0;
 	font-size: 0;
 	border:6px solid transparent;
 	border-bottom-color: #fdfdfd; 
@@ -58,8 +58,8 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	top:-12px;
 	margin-left:-3px; 
 	left: 50%;
-	height: 0px;
-	width: 0px;
+	height: 0;
+	width: 0;
 	font-size: 0;
 	border:6px solid transparent;
 	border-bottom-color: #dedede; 
