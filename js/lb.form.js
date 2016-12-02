@@ -117,11 +117,26 @@
 			});
 		},
 		_uploadfile:function(a,b){
-			var u = 'http://xiaoyaoge.me/lbforms/upload/'; 
+			function getNowFormatDate() {
+			    var date = new Date();
+			    var seperator1 = "";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+			    return currentdate;
+			}
+			var u = 'http://xiaoyaoge.me/lbforms/upload/'+getNowFormatDate(); 
 			$(b).uploadify({
 				'swf'      : 'js/uploadify.swf',
 				'uploader' : 'js/uploadify.php',
 				'onUploadSuccess' : function(file, data, response) {
+					console.log(data);
 					$('#' + file.id).find('.data').html(' 上传完毕');
 					var link = $('<span class="lb-file-name">'+file.name+'</span>');
 					var b = $('#' + file.id).parents('.lb-form').find('span.lb-file-name');
@@ -141,7 +156,7 @@
 								'<div class="lb-pop">',
 								'<div class="lb-pop-con">',
 								'<span class="lb-pop-close"></span>',
-								'<img class="lb-file" src="'+u+file.name+'"/>',
+								'<img class="lb-file" src="'+u+'/'+file.name+'"/>',
 								'</div>',
 								'<div class="lb-pop-bg"></div>',
 								'</div>'
@@ -242,6 +257,4 @@
 		var type = a[0].tagName;
 		t(a,type);
 	}
-	//参数设置
-	$.fn.lbform.defaults = {}
 })(jQuery, window , document);
