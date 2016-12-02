@@ -10,7 +10,7 @@
 ## 演示页面  [demo](http://xiaoyaoge.me/lbforms/demo.html)
 
 ## 使用方法
-1.页面引入资源
+#### 1.页面引入资源
 ``` bash
 <link rel="stylesheet" type="text/css" href="css/uploadify.css"><!--上传图片需引入-->
 <link rel="stylesheet" href="css/lbform.css">
@@ -19,13 +19,13 @@
 <script src="js/lb.form.js"></script><!-- 表格插件 -->
 <script src="http://my97.net/dp/My97DatePicker/WdatePicker.js"></script><!-- 日期需引入 -->
 ```
-2.html
+#### 2.html
 ``` bash
 <div class="form">
   <ul class="fn-clear">
     <li class="fn-left">
       <label><em>*</em>名称</label>
-      <input type="text" class="lb-input" data-tip ="true" date-type="name" data-msg = "请填写名称">
+      <input type="text" class="lb-input" data-tip ="true" data-msg = "请填写名称">
     </li>
     <li class="fn-left">
       <label>选项</label>
@@ -37,17 +37,17 @@
     </li>
     <li class="fn-left">
       <label><em>*</em>日期</label>
-      <input type="text" class="Wdate lb-input"  readonly="true" data-type="date" onclick="WdatePicker()" data-msg = "请选择日期">
+      <input type="text" class="Wdate lb-input"  readonly="true" onclick="WdatePicker()" data-msg = "请选择日期">
     </li>
     <li class="fn-left">
       <label>数量</label>
       <button class="button">取消</button>
       <button class="button">确定</button>
-      <input type="number" class="lb-input" data-tip ="true" data-type="number" >
+      <input type="number" class="lb-input" data-tip ="true">
     </li>
     <li class="fn-left">
       <label>图片</label>
-      <input type="file" data-file = 'true' class="lb-input" id="upload">
+      <input type="file" data-file = 'true' data-btname="选择图片" data-upType="img" class="lb-input" id="upload">
     </li>
     <li class="fn-left">
       <label>可输入选项</label>
@@ -70,7 +70,7 @@
     </li>
     <li class="fn-clear">
       <label>上传文件</label>
-      <input type="file" data-file = 'true' class="lb-input" id="upload2" data-msg = "请上传文件" data-btn ="upload">
+      <input type="file" data-file = 'true' data-btname="选择文件" data-upType="file" class="lb-input" id="upload2" data-msg = "请上传文件">
     </li>
     <li class="fn-clear">
       <label>地址</label>
@@ -80,17 +80,16 @@
   <button class="save">保存</button>
 </div>
 ```
-3.使用lbforms
+#### 3.使用lbforms
 ``` bash
 <script>
   $(function(){
-    $('.lb-input').lbform({});
-    $('.save').bind('click',function(){
-      $('.lb-input').each(function(){
+    $('.lb-input').lbform({});/*使用lbforms插件*/
+    $('.save').bind('click',function(){//点击保存按钮时，调用tip函数做验证判断
+        $('.lb-input').each(function(){
         $(this).lbform.tip($(this));
       });
     });
-
   });
 </script>
 ```
