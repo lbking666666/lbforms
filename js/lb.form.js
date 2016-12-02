@@ -136,7 +136,6 @@
 				'swf'      : 'js/uploadify.swf',
 				'uploader' : 'js/uploadify.php',
 				'onUploadSuccess' : function(file, data, response) {
-					console.log(data);
 					$('#' + file.id).find('.data').html(' 上传完毕');
 					var link = $('<span class="lb-file-name">'+file.name+'</span>');
 					var b = $('#' + file.id).parents('.lb-form').find('span.lb-file-name');
