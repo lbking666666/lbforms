@@ -95,26 +95,6 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	line-height: 22px;
 	cursor: default;
 }
-.file-text{ padding: 0 5px; height: 30px; line-height: 30px; }
-.lb-upload-img{
-	height: 100px;
-	width: 100px;
-	padding: 10px;
-	border:1px solid #ddd;
-	border-radius:5px;
-}
-.lb-upload { 
-	overflow:hidden;
-	clear: both;
-	padding: 10px 10px 0 135px;
-}
-.lb-upload-btn{
-	height: 30px;
-	border:1px solid #ddd;
-	width:120px;
-	float: right;
-	margin: 0 4px;
-}
 .lb-file-name{
 	position: absolute;
 	top:2px;

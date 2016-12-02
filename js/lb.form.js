@@ -7,20 +7,30 @@
 	 * 
 	 */
 	'use strict';//使用严格模式
+
 	var lbform = function (ele) {
 		this.$element = ele;
 		this._init(ele);//初始化
 	};
+
 	lbform.prototype = {
 		/**
 			@a:当前的容器
 			@b:传入进来的参数
 		**/
 		_init : function(a){
+			/*** 
+				_int(a)初始化
+				@a: 出入进来的input
+					循环input添加结构;
+					循环input给父级lb-form宽度;
+					当window窗口大小改变时，循环input改变父级lb-form宽度;
+			***/
 			var c = this;
 			for(var i = 0; i<a.length; i++){
 				c._h(a[i]);
 			}
+
 			function g(){
 				setTimeout(function(){
 					for(var i = 0;i<a.length;i++){
@@ -30,18 +40,31 @@
 					}
 				},50);
 			}
+
 			g();
+
 			$(window).resize(function(){
 				g();
 			});
 		},
 		_h : function(a){
+			/*** 
+				_h(a)结构
+				@a: 当前input
+					创建父级lb-form添加到当前input的外层;
+					根据type判断input的类型：
+					1.INPUT:
+						如果为下拉输入框，则把data-select的值转化为ul>li形式插入到input之后,添加select事件函数;
+						如果为上传文件，则复制当前input，去掉当前input的id，类型改变为hide，把复制后的b使用uploadfiy插件；
+					2.SELECT:
+						添加change事件	
+			***/
 			var c = this;
 			var type = a.tagName;
 			var f = $('<div class="lb-form" style="float:right"></div>');
 			$(a).wrap(f);
 			if(type == "INPUT"){
-				if($(a).attr('data-select')){//判断是否转化为下拉输入框
+				if($(a).attr('data-select')){
 					var g = [];
 					var h = $(a).attr('data-select').split(';');
 					g.push('<ul class="lb-input-select-list">');
@@ -53,7 +76,7 @@
 					$(a).parents('.lb-form').append(g.join(''));
 					c._select(a);
 				}
-				if($(a).attr('data-file')){//判断是否上传
+				if($(a).attr('data-file')){
 					var b = $(a).clone();
 					$(a).parents('.lb-form').append(b);
 					$(a).attr('type','hide');
@@ -67,6 +90,13 @@
 			}
 		},
 		_g : function(a,b){
+			/*** 
+				_g(a)宽度
+				@a: 当前input
+				@b: 当前父级lb-form的父级的宽度
+					计算当前input的同辈元素的宽度之和d;
+					b-d等于当前的lb-form的宽度 再减去边框2为当前的lb-form的宽度
+			***/
 			var c = $(a).parents('.lb-form').siblings().not('.lb-file');
 			var d = 0;
 			if(c.length > 1){
@@ -79,21 +109,21 @@
 			var w = b - d - 2;
 			$(a).parents('.lb-form').css({"width":w});
 		},
-		_blurEvent:function(a,b){//input 点击事件
+		_blurEvent:function(a,b){//input光标离开时事件
 			$(a).bind('blur',function(){
 				if($(a).attr('data-tip') == "true"){//判断是否需要提示
 					t(a,b);
 				}
 			})
 		},
-		_changeEvent:function(a,b){//select 点击事件
+		_changeEvent:function(a,b){//select下拉选择事件
 			$(a).bind('change',function(){
 				if($(a).attr('data-tip') == "true"){//判断是否需要提示
 					t(a,b);
 				}
 			});
 		},
-		_select:function(a){
+		_select:function(a){//模拟下拉
 			$(a).bind('click',function(event){
 				var c = $(this);
 				var b = $(this).next('.lb-input-select-list');
@@ -117,22 +147,44 @@
 			});
 		},
 		_uploadfile:function(a,b){
-			function getNowFormatDate() {
+			/*** 
+				_uploadfile(a,b) 上传事件
+				@a: 当前input
+				@b: 当前input的复制
+					调用uploadfiy插件;
+					自定义插件的文件类型和按钮名称；
+					成功后回调事件中创建弹出层显示文件或图片
+			***/
+			function getNowFormatDate() {//获得日期格式为20161202的日期
 			    var date = new Date();
-			    var seperator1 = "";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
+			    var s = "";
+			    var mh = date.getMonth() + 1;
+			    var sd = date.getDate();
+			    if (mh >= 1 && mh <= 9) {
+			        mh = "0" + mh;
 			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
+			    if (sd >= 0 && sd <= 9) {
+			        sd = "0" + sd;
 			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-			    return currentdate;
+			    var cd = date.getFullYear() + s + mh + s + sd;
+			    return cd;
 			}
-			var u = 'http://xiaoyaoge.me/lbforms/upload/'+getNowFormatDate(); 
+
+			var bn = $(a).attr('data-btname')|| "上传图片";
+			var y = $(a).attr('data-upType');
+			var u = 'http://xiaoyaoge.me/lbforms/upload/'+getNowFormatDate();//文件路径
+			if(y == "img"){
+				var d = 'Image Files';
+				var x = '*.gif; *.jpg; *.png; *.jpeg';
+			}else{
+				var d = 'All Files';
+				var x = '*';
+			}
+
 			$(b).uploadify({
+				'buttonText' : bn,
+				'fileTypeDesc' : d,
+				'fileTypeExts' : x,
 				'swf'      : 'js/uploadify.swf',
 				'uploader' : 'js/uploadify.php',
 				'onUploadSuccess' : function(file, data, response) {
@@ -143,30 +195,38 @@
 						b.remove();
 					}
 					$('#' + file.id).parents('.lb-form').append(link);
-					$(a).attr('value',u+file.name);
+					$(a).attr('value',u+'/'+file.name);
 					var d = $('#' + file.id).parents('.lb-form');
+
 					function hd(){
 						$('.lb-pop').remove();
 					}
+					
 					d.each(function(){
 						$(this).find('.lb-file-name').bind('click',function(e){
 							var p = [];
 							p.push(
 								'<div class="lb-pop">',
 								'<div class="lb-pop-con">',
-								'<span class="lb-pop-close"></span>',
-								'<img class="lb-file" src="'+u+'/'+file.name+'"/>',
+								'<span class="lb-pop-close"></span>'
+							);
+							if(y == "img"){
+								p.push('<img class="lb-file" src="'+u+'/'+file.name+'"/>');
+							}else{
+								p.push('<a target="_blank" href="'+u+'/'+file.name+'">'+file.name+'</a>');
+							}
+							if($('body').find('.lb-pop')){
+								$('.lb-pop').remove();
+							}
+							p.push(
 								'</div>',
 								'<div class="lb-pop-bg"></div>',
 								'</div>'
 							);
-							if($('body').find('.lb-pop')){
-								$('.lb-pop').remove();
-							}
 							$('body').append(p.join(''));
 							$('.lb-pop').show(500);
 							setTimeout(function(){
-								var mh = -($('.lb-file').height()/2);
+								var mh = -($('.lb-pop-con').height()/2);
 								$('.lb-pop-con').css('marginTop',mh);
 							}, 200);
 
@@ -181,13 +241,24 @@
 			});
 		}
 	};
+
 	$.fn.lbform = function() {
 		//创建Beautifier的实体
 		var lbForm = new lbform(this);
 		//调用其方法
 		return this;
 	};
-	function ms(a,s){//添加提示
+
+	function ms(a,s){
+		/***
+			ms(a,s)添加提示信息 
+			@a: 当前input
+			@s: 当前input的data-msg
+				创建提示信息结构
+				判断当前input是否存在data-msg
+				判断是否已经存在提示
+				给当前input添加提示并给父级添加error样式
+		***/
 		var f = [];
 		f.push(
 			'<div class="lb-msg">',
@@ -196,18 +267,30 @@
 			'<div class="lb-msg-con">'+s+'</div>',
 			'</div>'
 		);
-		var b = $(a).attr('data-msg');
-		if(b){
-			//判断如果存在提示则显示，否则添加提示
-			if($(a).next('.lb-msg').length > 0){
-				$(a).next('.lb-msg').remove();
-			}
+		if(s){
+			if($(a).next('.lb-msg').length > 0) $(a).next('.lb-msg').remove();
 			$(a).after(f.join(''));
-			//给边框添加错误颜色
 			$(a).parents('.lb-form').addClass('error');
 		}
 	}
+	
 	function t(a,b){
+		/***
+			t(a,b)验证提示信息 
+			@a: 当前input
+			@s: 当前input的type类型INPUT,SELECT
+				1.INPUT:
+					input先判断是否为空;
+					为空显示data-msg提示信息;
+					不为空查看input的data-type用正则判断;
+					如果不符合显示验证信息;
+					再次输入时隐藏掉错误提示.
+				2.SELECT:
+					判断当前被选中的是否为初始选项;
+					为初始值显示提示信息;
+					再次选择时隐藏提示信息.
+
+		***/
 		var s = $(a).attr('data-msg');
 		if(b == "INPUT"){
 			var v = $(a).val();
@@ -252,8 +335,11 @@
 			});
 		}
 	}
+
+	/* 暴露给外部调用tip */
 	$.fn.lbform.tip = function(a){
 		var type = a[0].tagName;
 		t(a,type);
 	}
+
 })(jQuery, window , document);
