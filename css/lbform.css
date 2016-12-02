@@ -7,6 +7,9 @@
 .lb-form.error{
 	border-color: #f00;
 }
+body>object{
+	display: none;
+}
 .lb-input{ 
 	position: absolute;
 	left: 0;
@@ -155,6 +158,7 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	width: 16px;
 	height: 16px;
 	display: block;
+	cursor: pointer;
 	background:#fff url(../images/uploadify-cancel.png) no-repeat center center;
 }
 .lb-pop-bg{
