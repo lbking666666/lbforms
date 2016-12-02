@@ -95,7 +95,10 @@
 ```
 
 ## 设置说明
-- data-msg
-- data-tip
-- data-file
-- data-select
+- data-msg    ...... 当input的值为空时的提示语   ...... string
+- data-tip    ...... 是否当离开input时显示提示语 ...... true,false
+- data-type   ...... 验证input类型              ...... tel,mail
+- data-file   ...... 判断是否file类型input      ...... true
+- data-btname ...... 选择并上传按钮的显示名称    ...... string
+- data-upType ...... 上传文件的类型             ...... img,file
+- data-select ...... 下拉输入类型input          ...... {'id':'0','value':'全部'};{'id':'1','value':'选项1'};{'id':'2','value':'选项2'}
