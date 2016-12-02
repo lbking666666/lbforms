@@ -95,10 +95,40 @@
 ```
 
 ## 设置说明
-- data-msg    --- 当input的值为空时的提示语   --- string
-- data-tip    --- 是否当离开input时显示提示语 --- true,false
-- data-type   --- 验证input类型              --- tel,mail
-- data-file   --- 判断是否file类型input      --- true
-- data-btname --- 选择并上传按钮的显示名称    --- string
-- data-upType --- 上传文件的类型             --- img,file
-- data-select --- 下拉输入类型input          --- {'id':'0','value':'全部'};{'id':'1','value':'选项1'};{'id':'2','value':'选项2'}
+<table width="100%">
+  <tr>
+    <th>data-msg</th>
+    <td>当input的值为空时的提示语</td>
+    <td>string</td>
+  </tr>
+  <tr>
+    <th>data-tip</th>
+    <td>是否当离开input时显示提示语</td>
+    <td>true,false</td>
+  </tr>
+  <tr>
+    <th>data-type</th>
+    <td>验证input类型错误提示</td>
+    <td>tel,mail</td>
+  </tr>
+  <tr>
+    <th>data-file</th>
+    <td>判断是否file类型input</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <th>data-btname</th>
+    <td>选择并上传按钮的显示名称</td>
+    <td>string</td>
+  </tr>
+  <tr>
+    <th>data-upType</th>
+    <td>上传文件的类型</td>
+    <td>img,file</td>
+  </tr>
+  <tr>
+    <th>data-select</th>
+    <td>下拉输入类型input</td>
+    <td>{'id':'0','value':'全部'};{'id':'1','value':'选项1'};{'id':'2','value':'选项2'}</td>
+  </tr>
+</table>
