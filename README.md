@@ -94,3 +94,9 @@
   });
 </script>
 ```
+
+## 设置说明
+- data-msg
+- data-tip
+- data-file
+- data-select
