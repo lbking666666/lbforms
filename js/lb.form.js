@@ -79,6 +79,8 @@
 				if($(a).attr('data-file')){
 					var b = $(a).clone();
 					$(a).parents('.lb-form').append(b);
+					var ft = $(a).attr('placeholder');
+					$(a).parents('.lb-form').append('<span class="lb-file-tip">'+ft+'</span>')
 					$(a).attr('type','hide');
 					$(a).removeAttr('id');
 					c._uploadfile(a,b);
@@ -172,6 +174,7 @@
 
 			var bn = $(a).attr('data-btname')|| "上传图片";
 			var y = $(a).attr('data-upType');
+			var n = $(a).attr('data-upnumber');
 			var u = 'http://xiaoyaoge.me/lbforms/upload/'+getNowFormatDate();//文件路径
 			if(y == "img"){
 				var d = 'Image Files';
@@ -180,61 +183,62 @@
 				var d = 'All Files';
 				var x = '*';
 			}
-
+			if(n=="1"){
+				var m = false;
+			}else{
+				var m = true;
+			}
 			$(b).uploadify({
 				'buttonText' : bn,
 				'fileTypeDesc' : d,
 				'fileTypeExts' : x,
+				'multi'    : m,
+				'queueSizeLimit' : n,
 				'swf'      : 'js/uploadify.swf',
 				'uploader' : 'js/uploadify.php',
+				'onSelect' : function(file) {
+		            var fi = $(a).parents('.lb-form').find('span.lb-file-name');
+		            if(fi){
+		            	fi.remove();
+		            }
+		            if($('body').find('.lb-pop')){
+						$('.lb-pop').remove();
+					}
+		        },
 				'onUploadSuccess' : function(file, data, response) {
+					$('#' + file.id).parents('.lb-form').find('.lb-file-tip').hide();
 					$('#' + file.id).find('.data').html(' 上传完毕');
 					var link = $('<span class="lb-file-name">'+file.name+'</span>');
-					var b = $('#' + file.id).parents('.lb-form').find('span.lb-file-name');
-					if(b){
-						b.remove();
-					}
 					$('#' + file.id).parents('.lb-form').append(link);
 					$(a).attr('value',u+'/'+file.name);
 					var d = $('#' + file.id).parents('.lb-form');
-
-					function hd(){
-						$('.lb-pop').remove();
+					var p = [];
+					p.push(
+						'<div class="lb-pop">',
+						'<div class="lb-pop-con">',
+						'<span class="lb-pop-close"></span>'
+					);
+					if(y == "img"){
+						p.push('<img class="lb-file" src="'+u+'/'+file.name+'"/>');
+					}else{
+						var k = '<a target="_blank" href="'+u+'/'+file.name+'">'+file.name+'</a>';
+						p.push(k);
 					}
-					
+					p.push(
+						'</div>',
+						'<div class="lb-pop-bg"></div>',
+						'</div>'
+					);
+					$('body').append(p.join(''));
 					d.each(function(){
-						$(this).find('.lb-file-name').bind('click',function(e){
-							var p = [];
-							p.push(
-								'<div class="lb-pop">',
-								'<div class="lb-pop-con">',
-								'<span class="lb-pop-close"></span>'
-							);
-							if(y == "img"){
-								p.push('<img class="lb-file" src="'+u+'/'+file.name+'"/>');
-							}else{
-								p.push('<a target="_blank" href="'+u+'/'+file.name+'">'+file.name+'</a>');
-							}
-							if($('body').find('.lb-pop')){
-								$('.lb-pop').remove();
-							}
-							p.push(
-								'</div>',
-								'<div class="lb-pop-bg"></div>',
-								'</div>'
-							);
-							$('body').append(p.join(''));
-							$('.lb-pop').show(500);
-							setTimeout(function(){
-								var mh = -($('.lb-pop-con').height()/2);
-								$('.lb-pop-con').css('marginTop',mh);
-							}, 200);
-
-							$('.lb-pop-close').bind('click',function(){
-								$('.lb-pop').hide(500);
-								setTimeout(hd(), 1000);
+						$(this).find('.lb-file-name').each(function(index){
+							$(this).bind('click',function(e){
+								$('.lb-pop').eq(index).show();
+								e.stopPropagation();
 							});
-							e.stopPropagation();
+							$('.lb-pop-close').bind('click',function(){
+								$(this).parents('.lb-pop').hide();
+							});
 						});
 					});
 				 }

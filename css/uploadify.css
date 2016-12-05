@@ -26,8 +26,11 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	color: #808080;
 }
 .uploadify-queue{
-	position: relative;
-	z-index: 12;
+	position: absolute;
+	top:0;
+	left: 0;
+	width: 350px;
+	z-index: 120;
 }
 .uploadify-queue-item {
 	background-color: #F5F5F5;

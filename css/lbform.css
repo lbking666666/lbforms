@@ -96,15 +96,19 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	cursor: default;
 }
 .lb-file-name{
-	position: absolute;
-	top:2px;
-	left: 2px;
-	bottom:2px;
-	right:2px;
+	float: left;
+	margin: 2px 5px;
 	line-height: 26px;
 	padding-left: 28px;
 	background: url(../images/imglink.png) no-repeat 5px  center;
 	cursor: pointer;
+}
+.lb-file-tip{
+	color: #999;
+	font-size: 12px;
+	float: left;
+	line-height: 26px;
+	padding: 2px 5px;
 }
 .lb-pop{
 	position: fixed;
@@ -121,13 +125,19 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	position: fixed;
 	top:50%;
 	left: 50%;
-	margin-left: -211px;
-	width: 400px;
+	margin-left: -156px;
+	margin-top: -156px;
+	width: 300px;
+	height: 300px;
 	border:1px solid #ddd;  
 	z-index: 1001;
 	background: #fff;
 	padding: 10px;
 	border-radius:10px; 
+}
+.lb-pop-con img{
+	max-width: 300px;
+	max-height: 300px;
 }
 .lb-pop-close{
 	position: absolute;
@@ -152,8 +162,4 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	background: #000;
 	opacity: 0.4;
 	z-index: 1000;
-}
-.lb-pop .lb-file{
-	vertical-align: middle;
-	width: 400px;
 }
