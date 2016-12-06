@@ -117,6 +117,11 @@
     <td>"0,10"</td>
   </tr>
   <tr>
+    <th>lb-msg-gule</th>
+    <td>自定义验证input</td>
+    <td>"{'gule':' /^[\u4E00-\u9FA5]+$/','tip':'请输入文字'}"</td>
+  </tr>
+  <tr>
     <th>lb-file</th>
     <td>判断是否file类型input</td>
     <td>true</td>
