@@ -8,16 +8,15 @@
 	 */
 	'use strict';//使用严格模式
 
-	var lbform = function (ele) {
+	var lbform = function(ele) {
 		this.$element = ele;
 		this._init(ele);//初始化
 	};
 
-	function lbSelect(a){
-		var g = [], b = '', h = '';
-		h = $(a).attr('lb-select').split(';');
+	function ls(a) {//render lb-select 
+		var g = [], b = '', h = $(a).attr('lb-select').split(';');
 		g.push('<ul class="lb-input-select-list">');
-		for(var i = 0; i < h.length; i++){
+		for(var i = 0; i < h.length; i++) {
 			b = eval("("+h[i]+")");
 			g.push('<li id="'+b.id+'">'+b.value+'</li>');
 		}
@@ -25,15 +24,16 @@
 		$(a).parents('.lb-form').append(g.join(''));
 	}
 
-	function lbFile(a,b,ft){
+	function lf(a, b, ft) {//render lb-file
 		$(a).parents('.lb-form').append(b);
 		$(a).parents('.lb-form').append('<span class="lb-file-tip">'+ft+'</span>')
 		$(a).attr('type','hide');
 		$(a).removeAttr('id');
 	}
-	function _w(c,b){
+
+	function lw(c, b) {//w = parent width - siblings width  - border width
 		var d = 0 ,w = 0;
-		if(c.length > 1){
+		if(c.length > 1) {
 			for(var i = 0; i < c.length; i++){
 				d += parseInt(c.eq(i).outerWidth(true));
 			}	
@@ -43,13 +43,35 @@
 		return w = b - d - 2;
 	}
 
-	function getNowFormatDate() {//获得日期格式为20161202的日期
-		var mh, sd, cd;
-	    mh = new Date().getMonth() + 1;
-	    sd = new Date().getDate();
+	function ld() {//date rule 20161202
+		var mh = new Date().getMonth() + 1, sd = new Date().getDate(), cd;
 	    if (mh >= 1 && mh <= 9) (mh = "0" + mh);
 	    if (sd >= 0 && sd <= 9) (sd = "0" + sd);
 	    return cd = new Date().getFullYear() + '' + mh + '' + sd;
+	}
+
+	function lp(y, u, s) {// render lb-pop
+		var p = [];
+		p.push(
+			'<div class="lb-pop">',
+			'<div class="lb-pop-con">',
+			'<span class="lb-pop-close"></span>'
+		);
+		if(y == "img") {
+			p.push('<div><img class="lb-file" src="'+u+'/'+s+'"/></div>');
+		}else{
+			p.push('<div><a target="_blank" href="'+u+'/'+s+'">'+s+'</a></div>');
+		}
+		p.push('</div>',
+			'<div class="lb-pop-bg"></div>',
+			'</div>'
+		);
+		if($('body').find('.lb-pop').length > 0 ) {
+			return;
+		}else{
+			$('body').append(p.join(''));
+			$('.lb-pop').show();
+		}
 	}
 
 	lbform.prototype = {
@@ -57,7 +79,7 @@
 			@a:当前的容器
 			@b:传入进来的参数
 		**/
-		_init : function(a){
+		_init : function(a) {
 			/*** 
 				_int(a)初始化
 				@a: 出入进来的input
@@ -69,8 +91,7 @@
 			for(var i = 0; i<a.length; i++){
 				c._h(a[i]);
 			}
-
-			function g(){
+			var g = function() {
 				setTimeout(function(){
 					for(var i = 0;i<a.length;i++){
 						var b, d;
@@ -79,7 +100,7 @@
 						c._g(a[i],d);
 					}
 				},50);
-			}
+			};
 
 			g();
 
@@ -87,7 +108,8 @@
 				g();
 			});
 		},
-		_h : function(a){
+
+		_h : function(a) {
 			/*** 
 				_h(a)结构
 				@a: 当前input
@@ -99,32 +121,29 @@
 					2.SELECT:
 						添加change事件	
 			***/
-			var c, type, f;
-			c = this;
-			type = a.tagName;
-			f = $('<div class="lb-form" style="float:right"></div>');
+			var c = this, type = a.tagName, f = $('<div class="lb-form" style="float:right"></div>');
 			$(a).wrap(f);
-			switch(type){
+			switch(type) {
 				case "INPUT":
-					if($(a).attr('lb-select')){
-						lbSelect(a);
-						c._select(a);
+					if($(a).attr('lb-select')) {
+						ls(a);
+						c._s(a);
 					}
-					if($(a).attr('lb-file')){
+					if($(a).attr('lb-file')) {
 						var b,ft;
 						b = $(a).clone();
 						ft = $(a).attr('placeholder');
-						lbFile(a,b,ft)
-						c._uploadfile(a,b);
+						lf(a,b,ft)
+						c._u(a,b);
 					}
-					c._blurEvent(a,type);
+					c._b(a,type);
 					break;
 				case "SELECT":
-					c._changeEvent(a,type);
+					c._c(a,type);
 					break;
 			}
 		},
-		_g : function(a,b){
+		_g : function(a, b) {
 			/*** 
 				_g(a)宽度
 				@a: 当前input
@@ -133,31 +152,26 @@
 					b-d等于当前的lb-form的宽度 再减去边框2为当前的lb-form的宽度
 			***/
 			var c = $(a).parents('.lb-form').siblings().not('.lb-file');
-			$(a).parents('.lb-form').css({"width":_w(c,b)});
+			$(a).parents('.lb-form').css({"width":lw(c,b)});
 		},
-		_blurEvent:function(a,b){//input光标离开时事件
-			$(a).bind('blur',function(){
-				lbMsgTip(a,b);
-			})
-		},
-		_changeEvent:function(a,b){//select下拉选择事件
-			$(a).bind('change',function(){
+		_b : function(a, b) {//input光标离开时事件
+			$(a).bind('blur',function() {
 				lbMsgTip(a,b);
 			});
 		},
-		_select:function(a){//模拟下拉
-			$(a).bind('click',function(event){
-				var c, b, d, bh, t, h;
-				c = $(this);
-				b = $(this).next('.lb-input-select-list');
-				bh = $(window).height();
-				t = $(this).offset().top + 31;
-				h = b.find('li').length *23;
+		_c : function(a, b) {//select下拉选择事件
+			$(a).bind('change',function() {
+				lbMsgTip(a,b);
+			});
+		},
+		_s : function(a) {//模拟下拉
+			$(a).bind('click',function(event) {
+				var c = $(this), b = $(this).next('.lb-input-select-list'), bh = $(window).height(), t = $(this).offset().top + 31, h = b.find('li').length *23,  d;
 				((bh - t)< h)?(b.css("top",-h)):(b.css("top","31px"));
 				$(document).bind('click',function(){
 					b.hide();
 				});
-				c.bind('keydown',function(){
+				c.bind('keydown',function() {
 					b.hide();
 				});
 				b.toggle();
@@ -169,20 +183,16 @@
 				event.stopPropagation();
 			});
 		},
-		_uploadfile:function(a,b){
+		_u : function(a, b) {
 			/*** 
-				_uploadfile(a,b) 上传事件
+				_u(a,b) 上传事件
 				@a: 当前input
 				@b: 当前input的复制
 					调用uploadfiy插件;
 					自定义插件的文件类型和按钮名称；
 					成功后回调事件中创建弹出层显示文件或图片
 			***/
-			var bn, y, n, u, m, x, d;
-			bn = $(a).attr('lb-upload-btn')|| "上传";
-			y = $(a).attr('lb-upload-type');//文件类型
-			n = $(a).attr('lb-upload-number');//文件个数
-			u = 'http://xiaoyaoge.me/lbforms/upload/'+getNowFormatDate();//文件路径
+			var bn = $(a).attr('lb-upload-btn')|| "上传", y = $(a).attr('lb-upload-type'), n = $(a).attr('lb-upload-number'), u = 'http://xiaoyaoge.me/lbforms/upload/'+ld(), m, x, d;
 			(y == "img")?(d = 'Image Files',x = '*.gif; *.jpg; *.png; *.jpeg'):(d = 'All Files',x = '*');
 			(n =="1")?(m = false):(m= true);
 			var set = {
@@ -194,49 +204,20 @@
 				'swf'      : 'js/uploadify.swf',
 				'uploader' : 'js/uploadify.php',
 				'onSelect' : function(file) {
-		            var fi = $(a).parents('.lb-form').find('span.lb-file-name');
-		            if(fi){
-		            	fi.remove();
-		            }
-		           /* if($('body').find('.lb-pop')){
-						$('.lb-pop').remove();
-					}*/
+					var fi = $(a).parents('.lb-form').find('span.lb-file-name');
+		            if(fi) fi.remove();
 		        },
-				'onUploadSuccess' : function(file, data, response) {
+				'onUploadSuccess' : function(file) {
+					var link = $('<span class="lb-file-name">'+file.name+'</span>'), d = $('#' + file.id).parents('.lb-form').find('.lb-file-name'), s = file.name;
 					$('#' + file.id).parents('.lb-form').find('.lb-file-tip').hide();
 					$('#' + file.id).find('.data').html(' 上传完毕');
-					var link = $('<span class="lb-file-name">'+file.name+'</span>');
 					$('#' + file.id).parents('.lb-form').append(link);
 					$(a).attr('value',u+'/'+file.name);
-					var d = $('#' + file.id).parents('.lb-form');
-					var p = [];
-					p.push(
-						'<div class="lb-pop">',
-						'<div class="lb-pop-con">',
-						'<span class="lb-pop-close"></span>'
-					);
-					if(y == "img"){
-						p.push('<img class="lb-file" src="'+u+'/'+file.name+'"/>');
-					}else{
-						var k = '<a target="_blank" href="'+u+'/'+file.name+'">'+file.name+'</a>';
-						p.push(k);
-					}
-					p.push(
-						'</div>',
-						'<div class="lb-pop-bg"></div>',
-						'</div>'
-					);
-					$('body').append(p.join(''));
-					d.each(function(){
-						$(this).find('.lb-file-name').each(function(index){
-							$(this).bind('click',function(e){
-								$('.lb-pop').eq(index).show();
-								e.stopPropagation();
-							});
-							$('.lb-pop-close').bind('click',function(){
-								$(this).parents('.lb-pop').hide();
-							});
-						});
+					d.bind('click',function(){
+						lp(y, u ,s);		
+					});
+					$('body').on('click','.lb-pop-close',function(){
+						$('.lb-pop').remove();
 					});
 				 }
 			}
@@ -251,7 +232,7 @@
 		return this;
 	};
 
-	function ms(a,s){
+	function ms(a, s) {
 		/***
 			ms(a,s)添加提示信息 
 			@a: 当前input
@@ -269,14 +250,14 @@
 			'<div class="lb-msg-con">'+s+'</div>',
 			'</div>'
 		);
-		if(s){
+		if(s) {
 			if($(a).next('.lb-msg').length > 0) $(a).next('.lb-msg').remove();
 			$(a).after(f.join(''));
 			$(a).parents('.lb-form').addClass('error');
 		}
 	}
 	
-	function t(a,b){
+	function t(a, b) {
 		/***
 			t(a,b)验证提示信息 
 			@a: 当前input
@@ -293,28 +274,18 @@
 					再次选择时隐藏提示信息.
 
 		***/
-		var s, k;
-		s = $(a).attr('lb-msg');
-		k= $(a).attr('lb-msg-num');
-		if(k){
-			var sk, sk1, sk2;
-			sk = k.split(",");
-			sk1 = sk[0];
-			sk2 = sk[1];
-		}
-		if(b == "INPUT"){
-			var v, t;
-			v = $(a).val();
-			t = $(a).attr('lb-msg-type');
+		var s = $(a).attr('lb-msg'), k = $(a).attr('lb-msg-num'), r = $(a).attr('lb-msg-gule'), rw;
+		if(b == "INPUT") {
+			var v = $(a).val(), t = $(a).attr('lb-msg-type');
 			var g = {
 		        tel : /^0?1[3|4|5|8][0-9]\d{8}$/,//手机
 		        mail:/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,//邮箱
 		        number : /^[0-9]*$/
 		    }
-			if(v == ""){
+			if(v == "") {
 				ms(a,s);
-			}else{
-				var m;
+			} else {
+				var m, rm;
 				switch (t){
 					case 'number':
 						m = '请输入数字！';
@@ -330,42 +301,48 @@
 						break;
 					default :
 						if(k){
-							if(v.length>sk2 || v.length<sk1){
+							var sk = k.split(","), sk1 = sk[0], sk2 = sk[1];
+							if(v.length>sk2 || v.length<sk1) {
 								m = '请输入'+sk1+'到'+sk2+'个字符';
 								ms(a,m)
 							}
+						}
+						if(r){
+							rw = eval("("+r+")");
+							m = rw.tip;
+							rm = eval("("+rw.gule+")");
+							if(!rm.test(v)) ms(a,m);
 						}
 						break;
 				}
 				
 			}
-			$(a).bind('keydown',function(){
+			$(a).bind('keydown',function() {
 				$(this).parents('.lb-form').removeClass('error');
 				$(this).next('.lb-msg').hide();
 			});
 		}
-		if(b == "SELECT"){
-			var index, m;
-			index = $(a).find('option:selected').index();
-			if(index == 0){
+		if(b == "SELECT") {
+			var index = $(a).find('option:selected').index(), m;
+			if(index == 0) {
 				m = $(a).attr('lb-msg');
 				ms(a,m);
 			}
-			$(a).bind('change',function(){
+			$(a).bind('change',function() {
 				$(this).parents('.lb-form').removeClass('error');
 				$(this).next('.lb-msg').hide();
 			});
 		}
 	}
 
-	function lbMsgTip(a,b){
-		if($(a).attr('lb-msg-tip') == "true"){//判断是否需要提示
+	function lbMsgTip(a,b) {
+		if($(a).attr('lb-msg-tip') == "true") {//判断是否需要提示
 			t(a,b);
 		}
 	}
 
 	/* 暴露给外部调用tip */
-	$.fn.lbform.tip = function(a){
+	$.fn.lbform.tip = function(a) {
 		var type = a[0].tagName;
 		t(a,type);
 	}

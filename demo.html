@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>lb.form.js-demo</title>
-	<link rel="stylesheet" type="text/css" href="css/uploadify.css"><!--上传图片需引入-->
+	<link rel="stylesheet" type="text/css" href="css/uploadify.css"><!--上传需引入-->
 	<link rel="stylesheet" href="css/lbform.css">
 	
 	<style type="text/css">
@@ -66,7 +66,7 @@
 		<ul class="fn-clear">
 			<li class="fn-left">
 				<label><em>*</em>名称</label>
-				<input type="text" class="lb-input" lb-msg-tip ="true" lb-msg = "请填写名称" lb-msg-num="0,10"  placeholder="填写名称">
+				<input type="text" class="lb-input" lb-msg-tip ="true" lb-msg-gule="{'gule':' /^[\u4E00-\u9FA5]+$/','tip':'请输入文字'}" lb-msg = "请填写名称" lb-msg-num="0,10"  placeholder="填写名称">
 			</li>
 			<li class="fn-left">
 				<label>选项</label>
@@ -78,7 +78,7 @@
 			</li>
 			<li class="fn-left">
 				<label><em>*</em>日期</label>
-				<input type="text" class="Wdate lb-input"  readonly="true" onclick="WdatePicker()" placeholder="点击选择日期" lb-msg = "请选择日期">
+				<input type="text" class="Wdate lb-input"  readonly="true" onclick="WdatePicker({onpicking:function(){$(this).parents('.lb-form').removeClass('error');$(this).next('.lb-msg').hide();}})" placeholder="点击选择日期" lb-msg = "请选择日期">
 			</li>
 			<li class="fn-left">
 				<label>数量</label>
@@ -95,10 +95,14 @@
 				<input type="text" class="lb-input" lb-msg = "请选择或输入"  value="" lb-select="{'id':'0','value':'全部'};{'id':'1','value':'选项1'};{'id':'2','value':'选项2'}">
 			</li>
 		</ul>
-		<ul  class="fn-clear">
+		<ul class="fn-clear">
 			<li class="fn-clear">
 				<label><em>*</em>姓名</label>
-				<input type="text" class="lb-input" lb-msg-tip ="true"  lb-msg = "请输入姓名">
+				<input type="text" class="lb-input" lb-msg-tip ="true"  lb-msg = "请输入姓名" lb-msg-gule="{'gule':' /^[\u4E00-\u9FA5]+$/','tip':'请输入文字'}">
+			</li>
+			<li class="fn-clear">
+				<label><em>*</em>日期</label>
+				<input type="text" class="Wdate lb-input"  readonly="true" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicking:function(){$(this).parents('.lb-form').removeClass('error');$(this).next('.lb-msg').hide();}})" placeholder="点击选择日期" lb-msg = "请选择日期">
 			</li>
 			<li class="fn-clear">
 				<label>邮箱</label>
@@ -123,7 +127,7 @@
 	<script src="js/jquery.js"></script><!-- jquery  -->
 	<script src="js/jquery.uploadify.min.js"></script><!-- 上传图片需引入 -->
 	<script src="js/lb.form.js"></script><!-- 表格插件 -->
-	<script src="http://my97.net/dp/My97DatePicker/WdatePicker.js"></script><!-- 日期需引入 -->
+	<script src="js/My97DatePicker/WdatePicker.js"></script><!-- 日期需引入 -->
 	<script>
 	  $(function(){
 	    $('.lb-input').lbform({});/*使用lbforms插件*/
