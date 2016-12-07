@@ -207,27 +207,26 @@
 			(y == "img")?(d = 'Image Files',x = '*.gif; *.jpg; *.png; *.jpeg'):(d = 'All Files',x = '*');
 			(n =="1")?(m = false):(m= true);
 			var set = {
-				'buttonText' : bn,
-				'fileTypeDesc' : d,
-				'fileTypeExts' : x,
-				'multi'    : m,
+				'buttonText'     : bn,
+				'fileTypeDesc'   : d,
+				'fileTypeExts'   : x,
+				'multi'          : m,
 				'queueSizeLimit' : n,
-				'swf'      : 'js/uploadify.swf',
-				'uploader' : 'js/uploadify.php',
-				'onSelect' : function(file) {
-					var fi = $(a.parentElement).find('.lb-file-name');
-		            if(fi) fi.remove();
-		            if($('#' + file.id).parents('.lb-form').hasClass('error')) {
-						$('#' + file.id).parents('.lb-form').removeClass('error');
-						$('#' + file.id).parents('.lb-form').find('.lb-msg').hide();	
+				'swf'            : 'js/uploadify.swf',
+				'uploader'       : 'js/uploadify.php',
+				'onSelect'       : function(file) {
+					var fi = $(a.parentElement).find('.lb-file-name'),fw = $('#' + file.id).parents('.lb-form');
+		            if(fi) fi.remove(); 
+		            if(fw.hasClass('error')) {
+						fw.removeClass('error');
+						fw.find('.lb-msg').hide();	
 					}
 		        },
 				'onUploadSuccess' : function(file) {
-					var link = $('<span class="lb-file-name" lb-file-name="'+file.name+'" lb-file-src="'+u+'/'+file.name+'">'+file.name+'</span>');
-					$('#' + file.id).parents('.lb-form').find('.lb-file-tip').hide();
+					var link = $('<span class="lb-file-name" lb-file-name="'+file.name+'" lb-file-src="'+u+'/'+file.name+'">'+file.name+'</span>') ,fw = $('#' + file.id).parents('.lb-form');
 					$('#' + file.id).find('.data').html(' 上传完毕');
-					$('#' + file.id).parents('.lb-form').append(link);
-					//$(a).attr('value',u+'/'+file.name);
+					fw.find('.lb-file-tip').hide();
+					fw.append(link);
 					$(a).each(function(){
 						var e = '';
 						$(this).parents('.lb-form').find('.lb-file-name').each(function() {
