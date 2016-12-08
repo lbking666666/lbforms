@@ -95,9 +95,8 @@
 						(document.documentElement.clientWidth%2 != 0)?(d=b-1):(d=b);
 						c._g(a[i],d);
 					}
-				},50);
+				},100);
 			};
-
 			g();
 
 			$(window).resize(function(){
@@ -125,7 +124,7 @@
 						ls(a);
 						c._s(a);
 					}
-					if(a.getAttribute('lb-file')) {
+					if(a.getAttribute('lb-upload-set')) {
 						var b,ft;
 						b = $(a).clone();
 						ft = a.getAttribute('placeholder');
@@ -159,7 +158,12 @@
 					$(a).parents('.lb-form').removeClass('error');
 					$(a).next('.lb-msg').hide();
 				}
-			});	
+			});
+			$(a).bind('click',function(){//日期控件控制iframe显示
+				if($('body').find('iframe')){
+					$('iframe').show();
+				}
+			});
 		},
 		_c : function(a, b) {//select下拉选择事件
 			$(a).bind('change',function() {
@@ -203,15 +207,17 @@
 					自定义插件的文件类型和按钮名称；
 					成功后回调事件中创建弹出层显示文件或图片
 			***/
-			var bn = $(a).attr('lb-upload-btn')|| "上传", y = $(a).attr('lb-upload-type'), n = $(a).attr('lb-upload-number'), u = 'http://xiaoyaoge.me/lbforms/upload/'+ld(), m, x, d;
-			(y == "img")?(d = 'Image Files',x = '*.gif; *.jpg; *.png; *.jpeg'):(d = 'All Files',x = '*');
-			(n =="1")?(m = false):(m= true);
+			var c = $(this);
+			var us = $(a).attr('lb-upload-set'), os = eval("("+us+")"), u = 'http://xiaoyaoge.me/lbforms/upload/'+ld(), m, x, d;
+			(os.type == 'img')?(d = 'Image Files',x = '*.gif; *.jpg; *.png; *.jpeg'):(d = 'All Files',x = '*');
+			(os.number =="1")?(m = false):(m= true);
 			var set = {
-				'buttonText'     : bn,
-				'fileTypeDesc'   : d,
-				'fileTypeExts'   : x,
-				'multi'          : m,
-				'queueSizeLimit' : n,
+				'buttonText'     : os.btn || '上传' ,
+				'fileTypeDesc'   : d || 'All Files',
+				'fileTypeExts'   : x || '*',
+				'multi'          : m || false,
+				'queueSizeLimit' : os.number || 1,
+				'fileSizeLimit'  : os.limit || '1GB',
 				'swf'            : 'js/uploadify.swf',
 				'uploader'       : 'js/uploadify.php',
 				'onSelect'       : function(file) {
@@ -238,10 +244,9 @@
 			}
 			$(b).uploadify(set);
 			$('body').on('click','.lb-file-name',function() {
-				var f = $(this).attr('lb-file-src');
-				var s =$(this).attr('lb-file-name');
-				var y = $(this).parents('.lb-form').find('.lb-input').attr('lb-upload-type');
-				lp(y, f, s);
+				var f = $(this).attr('lb-file-src'), s = $(this).attr('lb-file-name');
+				var uy = $(this).parents('.lb-form').find('.lb-input').attr('lb-upload-set'), oy = eval("("+uy+")") || 'file';
+				lp(oy.type, f, s);
 			});
 			$('body').on('click','.lb-pop-close',function() {
 				$('.lb-pop').remove();
@@ -301,44 +306,23 @@
 		var s = $(a).attr('lb-msg'), k = $(a).attr('lb-msg-num'), r = $(a).attr('lb-msg-gule'), rw;
 		if(b == "INPUT") {
 			var v = $(a).val(), t = $(a).attr('lb-msg-type');
-			var g = {
-		        tel : /^0?1[3|4|5|8][0-9]\d{8}$/,//手机
-		        mail:/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,//邮箱
-		        number : /^[0-9]*$/
-		    }
 			if(v == "") {
 				ms(a,s);
 			} else {
 				var m, rm;
-				switch (t){
-					case 'number':
-						m = '请输入数字！';
-						if(!g.number.test(v)) ms(a,m);
-						break;
-					case 'tel':
-						m = '请输入正确手机号！';
-						if(!g.tel.test(v)) ms(a,m);
-						break;
-					case 'mail':
-						m = '请输入正确邮箱！';
-						if(!g.mail.test(v)) ms(a,m);
-						break;
-					default :
-						if(k) {
-							var sk = k.split(","), sk1 = sk[0], sk2 = sk[1];
-							if(v.length>sk2 || v.length<sk1) {
-								m = '请输入'+sk1+'到'+sk2+'个字符';
-								ms(a,m);
-							}
-						}
-						if(r) {
-							rw = eval("("+r+")");
-							m = rw.tip;
-							rm = eval("("+rw.gule+")");
-							if(!rm.test(v)) ms(a,m);
-						}
-						break;
-				}	
+				if(k) {
+					var sk = k.split(","), sk1 = sk[0], sk2 = sk[1];
+					if(v.length>sk2 || v.length<sk1) {
+						m = '请输入'+sk1+'到'+sk2+'个字符';
+						ms(a,m);
+					}
+				}
+				if(r) {
+					rw = eval("("+r+")");
+					m = rw.tip;
+					rm = eval("("+rw.gule+")");
+					if(!rm.test(v)) ms(a,m);
+				}
 			}
 		}
 		if(b == "SELECT") {

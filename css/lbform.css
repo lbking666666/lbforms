@@ -7,7 +7,7 @@
 .lb-form.error{
 	border-color: #f00;
 }
-body>object{
+body>object,body iframe{
 	display: none;
 }
 .lb-input{ 
@@ -135,9 +135,18 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	padding: 10px;
 	border-radius:10px; 
 }
+.lb-pop-con div{
+	display: table-cell;
+	width: 300px;
+	height: 300px;
+	text-align: center;
+	vertical-align: middle;
+}
 .lb-pop-con img{
-	max-width: 300px;
-	max-height: 300px;
+	max-width: 298px;
+	max-height: 298px;
+	border:1px solid #eee; 
+	border-radius:8px; 
 }
 .lb-pop-close{
 	position: absolute;
@@ -161,5 +170,6 @@ input.lb-input[type="hide"],input.lb-input[type="file"]{
 	height: 100%;
 	background: #000;
 	opacity: 0.4;
+	filter:alpha(opacity=40);
 	z-index: 1000;
 }
