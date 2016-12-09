@@ -7,9 +7,6 @@
 .lb-form.error{
 	border-color: #f00;
 }
-body>object,body iframe{
-	display: none;
-}
 .lb-input{ 
 	position: absolute;
 	left: 0;

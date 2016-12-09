@@ -66,7 +66,7 @@
 		<ul class="fn-clear">
 			<li class="fn-left">
 				<label><em>*</em>名称</label>
-				<input type="text" class="lb-input" lb-msg-tip ="true" lb-msg-gule="{'gule':'/^[\u4E00-\u9FA5]+$/','tip':'请输入文字'}" lb-msg = "请填写名称" lb-msg-num="0,10"  placeholder="填写名称">
+				<input type="text" class="lb-input" lb-msg-tip ="true" lb-msg-gule="{'gule':/^[\u4E00-\u9FA5]+$/,'tip':'请输入文字'}" lb-msg = "请填写名称" lb-msg-num="0,10"  placeholder="填写名称">
 			</li>
 			<li class="fn-left">
 				<label>选项</label>
@@ -84,7 +84,7 @@
 				<label>数量</label>
 				<button class="button">取消</button>
 				<button class="button">确定</button>
-				<input type="text" class="lb-input" lb-msg-tip ="true" b-msg-gule="{'gule':'/^[0-9]*$/','tip':'请输入数字'}"  lb-msg = "请输入数量" placeholder="数量">
+				<input type="text" class="lb-input" lb-msg-tip ="true" lb-msg-gule="{'gule':/^[0-9]*$/,'tip':'请输入数字'}"  lb-msg = "请输入数量" placeholder="数量">
 			</li>
 			<li class="fn-left">
 				<label>图片</label>
@@ -98,7 +98,7 @@
 		<ul class="fn-clear">
 			<li class="fn-clear">
 				<label><em>*</em>姓名</label>
-				<input type="text" class="lb-input" lb-msg-tip ="true"  lb-msg = "请输入姓名" lb-msg-gule="{'gule':' /^[\u4E00-\u9FA5]+$/','tip':'请输入文字'}">
+				<input type="text" class="lb-input" lb-msg-tip ="true"  lb-msg = "请输入姓名" lb-msg-gule="{'gule': /^[\u4E00-\u9FA5]+$/,'tip':'请输入文字'}">
 			</li>
 			<li class="fn-clear">
 				<label><em>*</em>日期</label>
@@ -107,11 +107,11 @@
 			<li class="fn-clear">
 				<label>邮箱</label>
 				<button class="button">确定</button>
-				<input type="text" class="lb-input" lb-msg-gule="{'gule':'/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/','tip':'邮箱格式错误'}"  lb-msg-tip ="true" lb-msg = "请输入邮箱">
+				<input type="text" class="lb-input" lb-msg-gule="{'gule':/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,'tip':'邮箱格式错误'}"  lb-msg-tip ="true" lb-msg = "请输入邮箱">
 			</li>
 			<li class="fn-clear">
 				<label>电话</label>
-				<input type="text" class="lb-input" lb-msg-gule="{'gule':'/^0?1[3|4|5|8][0-9]\d{8}$/','tip':'请输正确手机号'}" lb-msg-tip ="true" lb-msg = "请输入手机号">
+				<input type="text" class="lb-input" lb-msg-gule="{'gule':/^0?1[3|4|5|8][0-9]\d{8}$/,'tip':'请输正确手机号'}" lb-msg-tip ="true" lb-msg = "请输入手机号">
 			</li>
 			<li class="fn-clear">
 				<label>上传文件</label>
