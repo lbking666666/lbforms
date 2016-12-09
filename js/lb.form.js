@@ -70,8 +70,7 @@
 				_int(a)初始化
 				@a: 出入进来的input
 					渲染input;
-					循环input给父级lb-form宽度;
-					当window窗口大小改变时，循环input改变父级lb-form宽度;
+					循环input给父级lb-form margin;
 			***/
 			var c = this;
 			for(var i = 0; i < a.length; i++) {
@@ -118,9 +117,7 @@
 			/*** 
 				_g(a)宽度
 				@a: 当前input
-				@b: 当前父级lb-form的父级的宽度
-					计算当前input的同辈元素的宽度之和d;
-					b-d等于当前的lb-form的宽度 再减去边框2为当前的lb-form的宽度
+					计算当前父级lb-form的margin
 			***/
 			$(a.parentElement).css('margin',lw(a));
 		},
